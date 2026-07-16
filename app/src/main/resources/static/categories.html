@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Categories - AetherStock WMS</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">Æ</div>
+        <div class="sidebar-logo-text">AetherStock</div>
+      </div>
+      <nav class="sidebar-menu">
+        <li class="sidebar-item">
+          <a href="./index.html">
+            <span>📊</span> Dashboard
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="./products.html">
+            <span>📦</span> Products
+          </a>
+        </li>
+        <li class="sidebar-item active">
+          <a href="./categories.html">
+            <span>🏷️</span> Categories
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="./suppliers.html">
+            <span>🤝</span> Suppliers
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="./warehouses.html">
+            <span>🏢</span> Warehouses
+          </a>
+        </li>
+      </nav>
+      <div class="sidebar-footer">
+        <p>AetherStock v1.0.0</p>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="page-header">
+        <div>
+          <h1 class="page-title">Product Categories</h1>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">Group your products for organized stock tracking</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-primary" id="btn-add-category">
+            <span>➕</span> Add Category
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Directory Panel -->
+      <div class="card-panel">
+        <div class="loading-overlay" id="panel-loading">
+          <div class="spinner"></div>
+        </div>
+        <div class="panel-header">
+          <h2 class="panel-title">Categories List</h2>
+          <div class="search-filter-row">
+            <div class="search-wrapper">
+              <input type="text" class="search-input" id="search-input" placeholder="Search categories by name...">
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="wms-table">
+            <thead>
+              <tr>
+                <th style="width: 80px;">ID</th>
+                <th>Category Name</th>
+                <th>Description</th>
+                <th style="width: 120px; text-align: center;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="categories-table-body">
+              <!-- Dynamically loaded categories -->
+              <tr>
+                <td colspan="4" class="empty-state">
+                  <div class="empty-state-icon">🔄</div>
+                  <div class="empty-state-title">Loading categories...</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <footer class="app-footer">
+        <p>&copy; 2026 AetherStock Warehouse Management System. All rights reserved.</p>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Add/Edit Modal -->
+  <div class="modal-overlay" id="category-modal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Create Category</h3>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <form id="category-form">
+        <div class="modal-body">
+          <input type="hidden" id="category-id">
+          
+          <div class="form-group">
+            <label class="form-label" for="categoryName">Category Name *</label>
+            <input type="text" class="form-control" id="categoryName" required placeholder="e.g. Electronics, Medical Supply">
+            <span style="color: var(--danger); font-size: 0.8rem; display: none;" id="error-category-name"></span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="description">Description</label>
+            <textarea class="form-control" id="description" placeholder="Brief details about products in this category"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="btn-modal-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-modal-submit">Save Category</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Script Modules -->
+  <script type="module" src="./js/categories.js"></script>
+</body>
+</html>

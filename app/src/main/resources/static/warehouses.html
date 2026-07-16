@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Warehouses - AetherStock WMS</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">Æ</div>
+        <div class="sidebar-logo-text">AetherStock</div>
+      </div>
+      <nav class="sidebar-menu">
+        <li class="sidebar-item">
+          <a href="./index.html">
+            <span>📊</span> Dashboard
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="./products.html">
+            <span>📦</span> Products
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="./categories.html">
+            <span>🏷️</span> Categories
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="./suppliers.html">
+            <span>🤝</span> Suppliers
+          </a>
+        </li>
+        <li class="sidebar-item active">
+          <a href="./warehouses.html">
+            <span>🏢</span> Warehouses
+          </a>
+        </li>
+      </nav>
+      <div class="sidebar-footer">
+        <p>AetherStock v1.0.0</p>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="page-header">
+        <div>
+          <h1 class="page-title">Warehouses & Locations</h1>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">Monitor physical locations and storage statuses</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-primary" id="btn-add-warehouse">
+            <span>➕</span> Add Warehouse
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Directory Panel -->
+      <div class="card-panel">
+        <div class="loading-overlay" id="panel-loading">
+          <div class="spinner"></div>
+        </div>
+        <div class="panel-header">
+          <h2 class="panel-title">Warehouses List</h2>
+          <div class="search-filter-row">
+            <div class="search-wrapper">
+              <input type="text" class="search-input" id="search-input" placeholder="Search warehouses by name, code, city, or manager...">
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="wms-table">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Warehouse Name</th>
+                <th>Manager</th>
+                <th>Location Details</th>
+                <th>Status</th>
+                <th style="width: 120px; text-align: center;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="warehouses-table-body">
+              <!-- Dynamically loaded warehouses -->
+              <tr>
+                <td colspan="6" class="empty-state">
+                  <div class="empty-state-icon">🔄</div>
+                  <div class="empty-state-title">Loading warehouses...</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <footer class="app-footer">
+        <p>&copy; 2026 AetherStock Warehouse Management System. All rights reserved.</p>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Add/Edit Modal -->
+  <div class="modal-overlay" id="warehouse-modal">
+    <div class="modal-container" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Create Warehouse</h3>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <form id="warehouse-form">
+        <div class="modal-body">
+          <input type="hidden" id="warehouse-id">
+          
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="warehouseCode">Warehouse Code *</label>
+              <input type="text" class="form-control" id="warehouseCode" required placeholder="e.g. WH-MUM-01">
+              <span class="error-msg" style="color: var(--danger); font-size: 0.8rem; display: none;" id="error-warehouse-code"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="warehouseName">Warehouse Name *</label>
+              <input type="text" class="form-control" id="warehouseName" required placeholder="e.g. Mumbai Hub">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="managerName">Manager Name *</label>
+              <input type="text" class="form-control" id="managerName" required placeholder="e.g. Robert Smith">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="phone">Phone Number *</label>
+              <input type="text" class="form-control" id="phone" required placeholder="e.g. +91 22 9876543">
+            </div>
+
+            <div class="form-group form-full-width">
+              <label class="form-label" for="address">Address *</label>
+              <input type="text" class="form-control" id="address" required placeholder="e.g. Plot 42, Sector 8, Industrial Estate">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="city">City *</label>
+              <input type="text" class="form-control" id="city" required placeholder="e.g. Navi Mumbai">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="state">State *</label>
+              <input type="text" class="form-control" id="state" required placeholder="e.g. Maharashtra">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pincode">Pincode *</label>
+              <input type="text" class="form-control" id="pincode" required placeholder="e.g. 400701">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="status">Status *</label>
+              <select class="filter-select form-control" id="status" required>
+                <option value="ACTIVE">ACTIVE</option>
+                <option value="INACTIVE">INACTIVE</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="btn-modal-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-modal-submit">Save Warehouse</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Script Modules -->
+  <script type="module" src="./js/warehouses.js"></script>
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Products - AetherStock WMS</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">Æ</div>
+        <div class="sidebar-logo-text">AetherStock</div>
+      </div>
+      <nav class="sidebar-menu">
+        <li class="sidebar-item">
+          <a href="./index.html">
+            <span>📊</span> Dashboard
+          </a>
+        </li>
+        <li class="sidebar-item active">
+          <a href="./products.html">
+            <span>📦</span> Products
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="./categories.html">
+            <span>🏷️</span> Categories
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="./suppliers.html">
+            <span>🤝</span> Suppliers
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="./warehouses.html">
+            <span>🏢</span> Warehouses
+          </a>
+        </li>
+      </nav>
+      <div class="sidebar-footer">
+        <p>AetherStock v1.0.0</p>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="page-header">
+        <div>
+          <h1 class="page-title">Inventory Items</h1>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">Monitor quantities, stock alerts, and storage mapping</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-primary" id="btn-add-product">
+            <span>➕</span> Add Product
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Directory Panel -->
+      <div class="card-panel">
+        <div class="loading-overlay" id="panel-loading">
+          <div class="spinner"></div>
+        </div>
+        <div class="panel-header">
+          <h2 class="panel-title">Products Inventory</h2>
+          
+          <div class="search-filter-row">
+            <!-- Search bar -->
+            <div class="search-wrapper">
+              <input type="text" class="search-input" id="search-input" placeholder="Search by name or product code...">
+            </div>
+
+            <!-- Filters -->
+            <select class="filter-select" id="filter-category">
+              <option value="">All Categories</option>
+              <!-- Populated dynamically -->
+            </select>
+
+            <select class="filter-select" id="filter-warehouse">
+              <option value="">All Warehouses</option>
+              <!-- Populated dynamically -->
+            </select>
+
+            <select class="filter-select" id="filter-status">
+              <option value="">All Statuses</option>
+              <option value="ACTIVE">ACTIVE</option>
+              <option value="LOW_STOCK">LOW STOCK</option>
+              <option value="OUT_OF_STOCK">OUT OF STOCK</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Inventory Table -->
+        <div class="table-responsive">
+          <table class="wms-table">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Product Name</th>
+                <th>Category</th>
+                <th>Supplier</th>
+                <th>Warehouse</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Status</th>
+                <th style="width: 140px; text-align: center;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="products-table-body">
+              <!-- Dynamically loaded products -->
+              <tr>
+                <td colspan="9" class="empty-state">
+                  <div class="empty-state-icon">🔄</div>
+                  <div class="empty-state-title">Loading inventory...</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <footer class="app-footer">
+        <p>&copy; 2026 AetherStock Warehouse Management System. All rights reserved.</p>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Add/Edit Modal -->
+  <div class="modal-overlay" id="product-modal">
+    <div class="modal-container" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Create Product</h3>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <form id="product-form">
+        <div class="modal-body">
+          <input type="hidden" id="product-id">
+          
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="productCode">Product Code *</label>
+              <input type="text" class="form-control" id="productCode" required placeholder="e.g. PRD-1001">
+              <span class="error-msg" style="color: var(--danger); font-size: 0.8rem; display: none;" id="error-product-code"></span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="productName">Product Name *</label>
+              <input type="text" class="form-control" id="productName" required placeholder="e.g. Laptop Charger 65W">
+            </div>
+
+            <div class="form-group form-full-width">
+              <label class="form-label" for="description">Description</label>
+              <textarea class="form-control" id="description" placeholder="Specify physical aspects, specs or location guidelines"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="unitPrice">Unit Price (INR) *</label>
+              <input type="number" step="0.01" min="0" class="form-control" id="unitPrice" required placeholder="e.g. 1499.00">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="quantity">Quantity *</label>
+              <input type="number" min="0" class="form-control" id="quantity" required placeholder="e.g. 150">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="minimumStock">Minimum Threshold *</label>
+              <input type="number" min="0" class="form-control" id="minimumStock" required placeholder="e.g. 20">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="unit">Stock Unit *</label>
+              <select class="filter-select form-control" id="unit" required>
+                <option value="PCS">PCS (Pieces)</option>
+                <option value="KG">KG (Kilograms)</option>
+                <option value="LTR">LTR (Litres)</option>
+                <option value="BOX">BOX (Boxes)</option>
+                <option value="MTR">MTR (Metres)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="categoryId">Category *</label>
+              <select class="filter-select form-control" id="categoryId" required>
+                <option value="">Select Category</option>
+                <!-- Populated dynamically -->
+              </select>
+              <p style="font-size: 0.75rem; margin-top: 0.15rem;"><a href="./categories.html" style="color: var(--primary); text-decoration: none;">+ Add Category</a></p>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="supplierId">Supplier *</label>
+              <select class="filter-select form-control" id="supplierId" required>
+                <option value="">Select Supplier</option>
+                <!-- Populated dynamically -->
+              </select>
+              <p style="font-size: 0.75rem; margin-top: 0.15rem;"><a href="./suppliers.html" style="color: var(--primary); text-decoration: none;">+ Add Supplier</a></p>
+            </div>
+
+            <div class="form-group form-full-width">
+              <label class="form-label" for="warehouseId">Warehouse *</label>
+              <select class="filter-select form-control" id="warehouseId" required>
+                <option value="">Select Warehouse</option>
+                <!-- Populated dynamically -->
+              </select>
+              <p style="font-size: 0.75rem; margin-top: 0.15rem;"><a href="./warehouses.html" style="color: var(--primary); text-decoration: none;">+ Add Warehouse</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="btn-modal-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-modal-submit">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- View Details Modal -->
+  <div class="modal-overlay" id="product-view-modal">
+    <div class="modal-container" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Inventory Details</h3>
+        <button class="modal-close" id="modal-view-close">&times;</button>
+      </div>
+      <div class="modal-body" id="product-view-body">
+        <!-- Loaded dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" id="btn-modal-view-close">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Script Modules -->
+  <script type="module" src="./js/products.js"></script>
+</body>
+</html>

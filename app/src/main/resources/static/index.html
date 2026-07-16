@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - AetherStock WMS</title>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">Æ</div>
+        <div class="sidebar-logo-text">AetherStock</div>
+      </div>
+      <nav class="sidebar-menu">
+        <li class="sidebar-item active">
+          <a href="./index.html">
+            <span>📊</span> Dashboard
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="./products.html">
+            <span>📦</span> Products
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="./categories.html">
+            <span>🏷️</span> Categories
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="./suppliers.html">
+            <span>🤝</span> Suppliers
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="./warehouses.html">
+            <span>🏢</span> Warehouses
+          </a>
+        </li>
+      </nav>
+      <div class="sidebar-footer">
+        <p>AetherStock v1.0.0</p>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="page-header">
+        <div>
+          <h1 class="page-title">Dashboard Overview</h1>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">Real-time inventory intelligence</p>
+        </div>
+        <div class="header-actions">
+          <span class="date-badge" id="current-date">July 13, 2026</span>
+        </div>
+      </header>
+
+      <!-- Dashboard Statistics Cards -->
+      <section class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-icon">📦</div>
+          <div class="metric-info">
+            <span class="metric-label">Total Products</span>
+            <span class="metric-value" id="stat-products">-</span>
+          </div>
+        </div>
+        <div class="metric-card amber">
+          <div class="metric-icon">⚠️</div>
+          <div class="metric-info">
+            <span class="metric-label">Low Stock Items</span>
+            <span class="metric-value" id="stat-low-stock">-</span>
+          </div>
+        </div>
+        <div class="metric-card rose">
+          <div class="metric-icon">🚨</div>
+          <div class="metric-info">
+            <span class="metric-label">Out of Stock</span>
+            <span class="metric-value" id="stat-out-of-stock">-</span>
+          </div>
+        </div>
+        <div class="metric-card emerald">
+          <div class="metric-icon">🏢</div>
+          <div class="metric-info">
+            <span class="metric-label">Warehouses</span>
+            <span class="metric-value" id="stat-warehouses">-</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Dashboard Rows: Details and Alerts -->
+      <div class="dashboard-row">
+        <!-- Stock Status Panel -->
+        <div class="card-panel" style="position: relative;">
+          <div class="loading-overlay" id="products-loading">
+            <div class="spinner"></div>
+          </div>
+          <div class="panel-header">
+            <h2 class="panel-title">Recent Inventory Health Check</h2>
+            <a href="./products.html" class="btn btn-outline btn-sm">View All Products</a>
+          </div>
+
+          <div class="table-responsive">
+            <table class="wms-table">
+              <thead>
+                <tr>
+                  <th>Product Code</th>
+                  <th>Product Name</th>
+                  <th>Warehouse</th>
+                  <th>Quantity</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="low-stock-table-body">
+                <!-- Dynamic low/out of stock items -->
+                <tr>
+                  <td colspan="5" class="empty-state">
+                    <div class="empty-state-icon">🔄</div>
+                    <div class="empty-state-title">Loading stock status...</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- System Alerts Panel -->
+        <div class="card-panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Critical Alerts</h2>
+          </div>
+          <div class="alert-list" id="dashboard-alerts">
+            <!-- Dynamic alerts -->
+            <div class="empty-state" style="padding: 1.5rem 0;">
+              <div class="empty-state-icon">✔️</div>
+              <div class="empty-state-title">System healthy. No pending alerts.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Directory Stats -->
+      <section class="metrics-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+        <div class="card-panel">
+          <div class="panel-header">
+            <h3 class="panel-title" style="font-size: 1.1rem;">🏷️ Categories Summary</h3>
+            <a href="./categories.html" style="font-size: 0.85rem; color: var(--primary); text-decoration: none; font-weight: 600;">Manage</a>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: var(--text-muted); font-size: 0.9rem;">Registered Product Categories</span>
+            <strong style="font-size: 1.5rem; color: var(--text-main);" id="stat-categories">-</strong>
+          </div>
+        </div>
+        <div class="card-panel">
+          <div class="panel-header">
+            <h3 class="panel-title" style="font-size: 1.1rem;">🤝 Suppliers Directory</h3>
+            <a href="./suppliers.html" style="font-size: 0.85rem; color: var(--primary); text-decoration: none; font-weight: 600;">Manage</a>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: var(--text-muted); font-size: 0.9rem;">Active Vendor Relationships</span>
+            <strong style="font-size: 1.5rem; color: var(--text-main);" id="stat-suppliers">-</strong>
+          </div>
+        </div>
+      </section>
+
+      <footer class="app-footer">
+        <p>&copy; 2026 AetherStock Warehouse Management System. All rights reserved.</p>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Script Modules -->
+  <script type="module" src="./js/dashboard.js"></script>
+</body>
+</html>
