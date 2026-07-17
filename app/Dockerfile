@@ -9,4 +9,4 @@ RUN ./mvnw clean package -DskipTests
 
 EXPOSE 8080
 
-CMD ["java","-jar","target/app-0.0.1-SNAPSHOT.jar"]
+CMD ["java","-jar","target/wms-0.0.1-SNAPSHOT.jar"]
